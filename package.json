@@ -1,0 +1,28 @@
+{
+  "name": "summary-statistics",
+  "version": "1.0.0",
+  "description": "A service useful to derive simplified summary statistics",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bolarge/summary-statistics.git"
+  },
+  "author": "Bolaji Salau",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bolarge/summary-statistics/issues"
+  },
+  "homepage": "https://github.com/bolarge/summary-statistics#readme",
+  "dependencies": {
+    "dotenv": "^8.6.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.13.14"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
+
