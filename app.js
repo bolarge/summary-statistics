@@ -2,6 +2,8 @@
 const express = require('express')
 const app = express()
 const datasets = require('./routes/datasets')
+const connectDB = require('./db/connect')
+require('dotenv').config()
 
 app.get('/hello', (req, res) => 
 res.send('Summary Statistics App'))
@@ -16,14 +18,18 @@ app.get('/hello', (req, res) => {
 
 app.use('/api/v1/datasets', datasets)
 
-//app.get('api/v1/datasets')
-//app.post('api/v1/datasets')
-//app.get('api/v1/datasets/:id')
-//app.delete('api/v1/datasets/:id')
-
-
-
 //Port
-const port = 5000
+const port = '5000'
 
-app.listen(port, () => console.log(`Server started on port ${port}...`))
+const start = async () => {
+  try{
+    await connectDB(process.env.MONGO_URI)
+    app.listen(port, () => {
+      console.log(`Server started SS App on port ${port}...`)
+    })
+  } catch(error) {
+    console.log(error)
+  }
+}
+
+start()
