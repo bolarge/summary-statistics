@@ -1,9 +1,16 @@
 //Setup server
+require('dotenv').config()
+require('express-async-errors')
+
 const express = require('express')
 const app = express()
-const datasets = require('./routes/datasets')
+
+const mainRouter = require('./routes/datasets')
+const notFoundMiddleware = require('./middleware/not-found')
+const errorHandlerMiddleware = require('./middleware/error-handler')
+
 const connectDB = require('./db/connect')
-require('dotenv').config()
+
 
 app.get('/hello', (req, res) => 
 res.send('Summary Statistics App'))
@@ -12,14 +19,13 @@ res.send('Summary Statistics App'))
 app.use(express.json())
 
 //Route
-app.get('/hello', (req, res) => {
-  res.send('Summary Statistics App')
-})
+app.use('/api/v1/datasets', mainRouter)
 
-app.use('/api/v1/datasets', datasets)
+app.use(notFoundMiddleware)
+app.use(errorHandlerMiddleware)
 
 //Port
-const port = '5000'
+const port = process.env.PORT || '5000'
 
 const start = async () => {
   try{
