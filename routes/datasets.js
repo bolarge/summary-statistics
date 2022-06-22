@@ -7,10 +7,16 @@ const {
   createDataSet,
   getDataSet,
   updateDataSet,
-  deleteDataSet
+  deleteDataSet,
+  getSalariesByOnContract,
+  getSalariesByDepartment
 } = require('../controllers/datasets')
 
-router.route('/').get(getAllDataSets).post(createDataSet)
+router.route('/department').get(getSalariesByDepartment)
+router.route('/contract').get(getSalariesByOnContract)
 router.route('/:id').get(getDataSet).patch(updateDataSet).delete(deleteDataSet)
+router.route('/').get(getAllDataSets).post(createDataSet)
+
+
 
 module.exports = router

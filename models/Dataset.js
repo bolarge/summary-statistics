@@ -33,8 +33,8 @@ const DataSetSchema = new mongoose.Schema({
     trim: true
   },
   on_contract: {
-    type: String,
-    trim: true
+    type: Boolean,
+    default: false
   }
 })
 
