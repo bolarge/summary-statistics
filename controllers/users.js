@@ -21,25 +21,11 @@ const createUser = asyncWrapper(async (req, res, next) => {
     user.hash = bcrypt.hashSync(req.body.password, 10);
   }
 
-  //  const user = await User.create(req.body)
   await user.save();
   res.status(201).json({ user })
-})
-
-const signInUser = asyncWrapper(async (req, res, next) => {
-  let userDetails = req.body
-  const user = await User.findOne({userName: userDetails.username })
-  if (user && bcrypt.compareSync(userDetails.password, user.hash)) {
-      const token = jwt.sign({ sub: user.id }, JWT_SECRET, { expiresIn: '7d' });
-      return {
-          ...user.toJSON(),
-          token
-      };
-  }
 })
 
 module.exports = {
   getAllUsers,
   createUser,
-  signInUser
 }
