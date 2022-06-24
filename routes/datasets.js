@@ -23,7 +23,7 @@ router.route('/department').get(authMiddleware, getSalariesByDepartment)
 router.route('/contract').get(authMiddleware, getSalariesByOnContract)
 router.route('/users').get(authMiddleware, getAllUsers).post(authMiddleware, createUser)
 router.route('/:id').get(authMiddleware, getDataSet).patch(authMiddleware, updateDataSet).delete(authMiddleware, deleteDataSet)
-router.route('/').get(authMiddleware, getAllDataSets).post(authMiddleware, createDataSet)
+router.route('/').get(getAllDataSets).post(createDataSet)
 
 
 
