@@ -9,13 +9,14 @@ const {
   deleteDataSet,
   getSalariesByOnContract,
   getSalariesByDepartment
-} = require('../controllers/datasets');
+} = require('../controllers/datasets')
 
 // const { getAllUsers, createUser } = require('../controllers/users');
 // const {login, dashboard } = require('../controllers/main')
 // const authMiddleware = require('../middleware/auth')
 
 router.route('/').get(getAllDataSets).post(createDataSet)
+router.route('/:id').get(getDataSet).patch(updateDataSet).delete( deleteDataSet)
 
 // router.route('/login').post(login)
 // router.route('/dashboard').get(authMiddleware, dashboard)
@@ -25,7 +26,6 @@ router.route('/').get(getAllDataSets).post(createDataSet)
 // router.route('/users').get(authMiddleware, getAllUsers).post(authMiddleware, createUser)
 // router.route('/:id').get(authMiddleware, getDataSet).patch(authMiddleware, updateDataSet).delete(authMiddleware, deleteDataSet)
 // router.route('/').get(authMiddleware, getAllDataSets).post(authMiddleware, createDataSet)
-
 
 
 module.exports = router

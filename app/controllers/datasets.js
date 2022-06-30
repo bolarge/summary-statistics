@@ -16,35 +16,35 @@ const createDataSet = asyncWrapper(async (req, res) => {
 
 const getDataSet = asyncWrapper(async (req, res, next) => {
   const { id: dataSetId } = req.params;
-  const dataSet = await Dataset.findOne({_id: dataSetId})
-  if (!dataSet) {
+  const dataset = await Dataset.findOne({_id: dataSetId})
+  if (!dataset) {
     return next(createCustomError(`No dataSet with id : ${dataSetId}`, 404))
   }
 
-  res.status(200).json({ dataSet })
+  res.status(200).json({ dataset })
 })
 
 const updateDataSet = asyncWrapper(async (req, res, next) => {
   const { id: dataSetId } = req.params;
-  const dataSet = await Dataset.findOneAndUpdate({_id: dataSetId}, req.body, {
+  const dataset = await Dataset.findOneAndUpdate({_id: dataSetId}, req.body, {
     new: true,
     runValidators: true,
   })
-  if (!dataSet) {
+  if (!dataset) {
     return next(createCustomError(`No dataSet with id : ${dataSetId}`, 404))
   }
 
-  res.status(200).json({ dataSet })
+  res.status(200).json({ dataset })
 })
 
 const deleteDataSet = asyncWrapper(async(req, res, next) => {
   const { id: dataSetId } = req.params;
-  const dataSet = await Dataset.findOneAndDelete({_id: dataSetId})
-  if (!dataSet) {
+  const dataset = await Dataset.findOneAndDelete({_id: dataSetId})
+  if (!dataset) {
     return next(createCustomError(`No dataSet with id : ${dataSetId}`, 404))
   }
 
-  res.status(200).json({ dataSet })
+  res.status(200).json({ dataset })
 })
 
 const getSalariesByOnContract = asyncWrapper(async (req, res, next) => {
@@ -54,7 +54,7 @@ const getSalariesByOnContract = asyncWrapper(async (req, res, next) => {
   }
   console.log(contracted.on_contract)
 
-   let dataSets = await Dataset.aggregate([
+   let datasets = await Dataset.aggregate([
     { $match: {on_contract: contracted.on_contract }},
     {$group: {
       _id: null,
@@ -65,14 +65,14 @@ const getSalariesByOnContract = asyncWrapper(async (req, res, next) => {
     }}
     ]);
 
-   if (!dataSets) {
+   if (!datasets) {
     return next(createCustomError(`No dataSets found`, 404))
   }
-   return res.status(200).json({ dataSets })
+   return res.status(200).json({ datasets })
 })
 
 const getSalariesByDepartment = asyncWrapper(async (req, res) => {
-  let dataSets = await Dataset.aggregate([
+  let datasets = await Dataset.aggregate([
     {$group: {
       _id: '$department',
       total: { $sum: '$salary' },
@@ -82,10 +82,10 @@ const getSalariesByDepartment = asyncWrapper(async (req, res) => {
     }}
     ]);
 
-   if (!dataSets) {
+   if (!datasets) {
     return next(createCustomError(`No dataSets found`, 404))
   }
-   return res.status(200).json({ dataSets })
+   return res.status(200).json({ datasets })
 })
 
 
