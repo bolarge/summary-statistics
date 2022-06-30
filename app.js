@@ -10,17 +10,11 @@ const errorHandlerMiddleware = require('./middleware/error-handler')
 //Middleware
 app.use(express.json())
 
-const students = ["Elie", "Matt", "Joel", "Michael"];
-
-app.get('/', (req, res) => {
-  res.json({students})
+//Route
+app.get('/hello', (req, res) => {
+  res.send('Summary Statistics App!')
 })
 
-// app.get("/", (req, res) => {
-//   res.status(200).send("Welcome to Summary Statistics!");
-// });
-
-//Route
 app.use('/api/v1/datasets', mainRouter)
 
 app.use(notFoundMiddleware)

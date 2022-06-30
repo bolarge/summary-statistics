@@ -1,3 +1,4 @@
 {
-  "json.maxItemsComputed": 7500
+  "json.maxItemsComputed": 7500,
+  "jest.jestCommandLine": "jest"
 }
