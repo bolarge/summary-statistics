@@ -2,27 +2,46 @@
 A service useful to derive simplified summary statistics
 
 ## Project Setup
+To run, ensure to have docker and docker compose running on local device. Project can be ran in the following modes; docker-compose, development and test. Each mode is supported by their configuration and issued from the command line.
 
-In order to run the project, setup .env and set MONGO_URI variable equal to DB connection string.
+### Start summary-statisticsapp with docker-compose
+````
+docker-compose up
+````
 
-In order to avoid port collisions, in the source code port value is 5000
+### Stop summmary-statisticapp with docker-compose
+````
+docker-compose down
+````
 
-### How do I get set up? ###
+### Start Dev mode
+````
+npm run dev
+````
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+### Stop Dev mode
+````
+npm stop dev
+````
 
-### Contribution guidelines ###
+### Run Test Script
+````
+npm run test
+````
 
-* Writing tests
-* Code review
-* Other guidelines
+### Stop Test
+````
+Press q from command prompt
+````
 
-### Who do I talk to? ###
+### Tech Stack
+* Node
+* Express
+* MongoDB
+* Mongoose
+* Jest
+* Supertest
+* Docker
+* Docker Compose
 
-* Repo owner or admin
-* Other community or team contact
+

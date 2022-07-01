@@ -12,6 +12,7 @@ services:
     volumes:
       - db:/data/db
   app:
+    image: ${DOCKER_REGISTRY}/summary-statisticsapp
     depends_on:
       - mongodb
     build: ./app

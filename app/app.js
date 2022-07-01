@@ -1,6 +1,5 @@
 //Setup server
 require('express-async-errors')
-
 const express = require('express')
 const app = express()
 const mainRouter = require('./routes/datasets')
