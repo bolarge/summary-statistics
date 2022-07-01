@@ -1,3 +1,4 @@
+require('express-async-errors')
 const express = require('express')
 const app = express()
 const request = require("supertest")
@@ -123,5 +124,21 @@ describe("Should delete a dataset using an Id", () => {
     console.log(data)
 
     expect(deletedData.statusCode).toBe(200)
+  })
+})
+
+describe("Should create a new dataset", () => {
+  it("POST /api/v1/datasets/users", async () => {
+    const payload = {
+      username: "Funmi@pupa",
+      password: "sweet_little"
+    }
+    const postData = await request(app).post("/api/v1/datasets/users").send(payload)
+    const data = postData._body.user
+    console.log(data)
+
+    //expect(data.username).toBe('Bolaji')
+    expect(data).toHaveProperty('id')
+    expect(postData.statusCode).toBe(201)
   })
 })

@@ -4,9 +4,9 @@
   "description": "A service useful to derive simplified summary statistics",
   "main": "server.js",
   "scripts": {
-    "start": "env-cmd -f ./config/dev.env nodemon server.js",
-    "test": "env-cmd -f ./config/test.env jest --watchAll",
-    "test:watch": "jest --watch"
+    "prod": "env-cmd -f ./config/prod.env server.js",
+    "dev": "env-cmd -f ./config/dev.env nodemon server.js",
+    "test": "env-cmd -f ./config/test.env jest --watchAll"
   },
   "repository": {
     "type": "git",
