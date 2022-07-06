@@ -3,10 +3,10 @@ const app = require('./app')
 const connectDB = require('./db/connect')
 
 //Port
-//const port = process.env.NODE_ENV === "dev" ? process.env.PORT : process.env.NODE_DOCKER_PORT
-const port = process.env.NODE_DOCKER_PORT || process.env.PORT
+const port = (process.env.NODE_ENV === 'dev' || process.env.NODE_ENV === 'test') ? process.env.PORT : process.env.NODE_DOCKER_PORT
 
 const start = async () => {
+  console.log(process.env.NODE_ENV)
   try{
     await connectDB()
     app.listen(port, () => {

@@ -1,28 +1,36 @@
 const User = require('../models/User')
 const asyncWrapper = require('../middleware/async')
-const { createCustomError } = require('../errors/custom-error.js')
-const bcrypt = require('bcryptjs')
-
+const CustomError = require('../errors')
+const { StatusCodes } = require('http-status-codes');
+const Validator  = require('../validation/validator')
+const { attachCookiesToResponse, createTokenUser } = require('../utils')
 
 const getAllUsers = asyncWrapper(async (req, res) => {
-  const users = await User.find({})
-  res.status(200).json({ users })
+  console.log(req.user)
+  const users = await User.find({ role: 'user' }).select('-password')
+  res.status(StatusCodes.OK).json({ users })
 })
 
-const createUser = asyncWrapper(async (req, res, next) => {
-    // validate
-    if (await User.findOne({ username: req.body.username })) {
-      throw 'Username "' + req.body.username + '" is already taken';
-  }
-  const user = new User(req.body);
+const createUser = asyncWrapper(async (req, res) => {
+  let newUser = req.body
+  // validate
+   newUser = Validator.validatePayload(newUser, Validator.UserValidation)
 
-   // hash password
-   if (req.body.password) {
-    user.hash = bcrypt.hashSync(req.body.password, 10);
+  const emailAlreadyExists = await User.findOne({ email: req.body.email })
+  if (emailAlreadyExists) {
+    throw new CustomError.BadRequestError('Email already exists')
   }
 
-  await user.save();
-  res.status(201).json({ user })
+  // first registered user is an admin
+  const isFirstAccount = (await User.countDocuments({})) === 0
+  const role = isFirstAccount ? 'admin' : 'user'
+  newUser.role = role
+
+  const user = await User.create(newUser)
+  const tokenUser = createTokenUser(user)
+  attachCookiesToResponse({ res, user: tokenUser })
+  console.log(tokenUser)
+  res.status(StatusCodes.CREATED).json({ user: tokenUser })
 })
 
 module.exports = {

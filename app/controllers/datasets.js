@@ -1,7 +1,7 @@
 const Dataset = require('../models/Dataset')
 const asyncWrapper = require('../middleware/async')
-const { createCustomError } = require('../errors/custom-error.js')
-
+const CustomError = require('../errors')
+const Validator = require('../validation/validator')
 
 //Set up controllers
 const getAllDataSets = asyncWrapper(async (req, res) => {
@@ -10,7 +10,9 @@ const getAllDataSets = asyncWrapper(async (req, res) => {
 })
 
 const createDataSet = asyncWrapper(async (req, res) => {
-  const dataset = await Dataset.create(req.body)
+  let newDataset = req.body
+  newDataset = Validator.validatePayload(newDataset, Validator.DatasetValidation)
+  const dataset = await Dataset.create(newDataset)
   res.status(201).json({ dataset })
 })
 
@@ -18,9 +20,8 @@ const getDataSet = asyncWrapper(async (req, res, next) => {
   const { id: dataSetId } = req.params;
   const dataset = await Dataset.findOne({_id: dataSetId})
   if (!dataset) {
-    return next(createCustomError(`No dataSet with id : ${dataSetId}`, 404))
+   throw new CustomError.NotFoundError(`No dataset with id : ${dataSetId}`)
   }
-
   res.status(200).json({ dataset })
 })
 
@@ -31,7 +32,7 @@ const updateDataSet = asyncWrapper(async (req, res, next) => {
     runValidators: true,
   })
   if (!dataset) {
-    return next(createCustomError(`No dataSet with id : ${dataSetId}`, 404))
+    throw new CustomError.NotFoundError(`No dataSet with id : ${dataSetId}`);
   }
 
   res.status(200).json({ dataset })
@@ -41,7 +42,7 @@ const deleteDataSet = asyncWrapper(async(req, res, next) => {
   const { id: dataSetId } = req.params;
   const dataset = await Dataset.findOneAndDelete({_id: dataSetId})
   if (!dataset) {
-    return next(createCustomError(`No dataSet with id : ${dataSetId}`, 404))
+    throw new CustomError.NotFoundError(`No dataSet with id : ${dataSetId}`);
   }
 
   res.status(200).json({ dataset })
@@ -66,7 +67,7 @@ const getSalariesByOnContract = asyncWrapper(async (req, res, next) => {
     ]);
 
    if (!datasets) {
-    return next(createCustomError(`No dataSets found`, 404))
+    throw new CustomError.NotFoundError(`No datasets found`)
   }
    return res.status(200).json({ datasets })
 })
@@ -83,12 +84,10 @@ const getSalariesByDepartment = asyncWrapper(async (req, res) => {
     ]);
 
    if (!datasets) {
-    return next(createCustomError(`No dataSets found`, 404))
+    throw new CustomError.NotFoundError(`No datasets found`)
   }
    return res.status(200).json({ datasets })
 })
-
-
 
 module.exports = {
   getAllDataSets,

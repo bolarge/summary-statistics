@@ -1,5 +1,9 @@
 const express = require('express')
 const router = express.Router()
+const { authenticateUser, authorizePermissions } = require('../middleware/authentication')
+
+const { login,  logout} = require('../controllers/auth')
+const { getAllUsers, createUser } = require('../controllers/users')
 
 const {
   getAllDataSets,
@@ -11,24 +15,18 @@ const {
   getSalariesByDepartment
 } = require('../controllers/datasets')
 
-const { getAllUsers, createUser } = require('../controllers/users');
-const {login, dashboard } = require('../controllers/main')
-const authMiddleware = require('../middleware/auth')
-
-//FOR TESTING WITHOUT AUTH
-// router.route('/users').get(getAllUsers).post(createUser)
-// router.route('/:id').get(getDataSet).patch(updateDataSet).delete( deleteDataSet)
-// router.route('/').get(getAllDataSets).post(createDataSet)
-
+//IDENTITY AND SECURITY
 router.route('/login').post(login)
-router.route('/dashboard').get(authMiddleware, dashboard)
+router.route('/logout').get(logout)
+router.route('/users').post(createUser)
 
-router.route('/users').get(authMiddleware, getAllUsers).post(authMiddleware, createUser)
+//USER 
+router.route('/users').get(authenticateUser, authorizePermissions('admin'), getAllUsers)
 
-router.route('/department').get(authMiddleware, getSalariesByDepartment)
-router.route('/contract').get(authMiddleware, getSalariesByOnContract)
-router.route('/:id').get(authMiddleware, getDataSet).patch(authMiddleware, updateDataSet).delete(authMiddleware, deleteDataSet)
-router.route('/').get(authMiddleware, getAllDataSets).post(authMiddleware, createDataSet)
-
+//DATASET
+router.route('/department').get(authenticateUser, getSalariesByDepartment)
+router.route('/contract').get(authenticateUser, getSalariesByOnContract)
+router.route('/:id').get(authenticateUser, getDataSet).patch(authenticateUser, updateDataSet).delete(authenticateUser, deleteDataSet)
+router.route('/').get(authenticateUser, getAllDataSets).post(authenticateUser, createDataSet)
 
 module.exports = router
