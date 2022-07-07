@@ -19,7 +19,7 @@ const authenticateUser = async (req, res, next) => {
   
   try {
     const { name, userId, role } = isTokenValid({ token })
-    console.log(name)
+    //console.log(name)
     req.user = { name, userId, role }
     
     next()

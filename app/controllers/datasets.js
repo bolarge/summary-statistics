@@ -11,13 +11,23 @@ const getAllDataSets = asyncWrapper(async (req, res) => {
 
 const createDataSet = asyncWrapper(async (req, res) => {
   let newDataset = req.body
-  newDataset = Validator.validatePayload(newDataset, Validator.DatasetValidation)
+  try {
+    newDataset = await Validator.validatePayload(newDataset, Validator.DatasetValidation)
+  }catch (error) {
+    throw new CustomError.BadRequestError(`${error}`)
+  }
+  
   const dataset = await Dataset.create(newDataset)
   res.status(201).json({ dataset })
 })
 
 const getDataSet = asyncWrapper(async (req, res, next) => {
   const { id: dataSetId } = req.params;
+
+  if(!dataSetId){
+    throw new CustomError.BadRequestError('Please enter a dataset Id')
+  }
+
   const dataset = await Dataset.findOne({_id: dataSetId})
   if (!dataset) {
    throw new CustomError.NotFoundError(`No dataset with id : ${dataSetId}`)

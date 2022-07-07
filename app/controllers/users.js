@@ -29,7 +29,7 @@ const createUser = asyncWrapper(async (req, res) => {
   const user = await User.create(newUser)
   const tokenUser = createTokenUser(user)
   attachCookiesToResponse({ res, user: tokenUser })
-  console.log(tokenUser)
+  //console.log(tokenUser)
   res.status(StatusCodes.CREATED).json({ user: tokenUser })
 })
 

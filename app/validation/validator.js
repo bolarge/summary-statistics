@@ -28,7 +28,7 @@ module.exports.DatasetValidation = Joi.object().keys({
 })
 
 module.exports.validatePayload = (data, schema) => {
-  const {error, value} = schema.validate(data);
+  const {error, value} = schema.validate(data)
 
   if(error) {
     const errorFields = error.details.map(err => err.message);
