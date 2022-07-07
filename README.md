@@ -156,7 +156,7 @@ Body: {
 ```
 Datasets incorrect response:
 ```
-Code: 200
+Code: 401
 Body: {"msg": "Authentication Invalid"}
 ```
 
